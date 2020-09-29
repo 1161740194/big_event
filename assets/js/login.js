@@ -34,3 +34,21 @@ forms.verify({
 });
 
 //登陆
+$('.login form').on('submit', function (e){
+    e.preventDefault();
+    let data = $(this).serialize()
+    console.log(data);
+    $.ajax({
+        type: 'POST',
+        url: '/api/login',
+        data: data,
+        success: function (res){
+            console.log(res);
+            layer.msg(res.message)
+            if(res.status === 0) {
+                localStorage.setItem('token', res.token)
+                location.href = '/index.html'
+            }
+        }
+    })
+})
