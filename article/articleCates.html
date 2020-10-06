@@ -76,7 +76,7 @@
                 <td>{{ item.pub_date }}</td>
                 <td>{{ item.state }}</td>
                 <td>
-                    <button class=" layui-btn layui-btn-xs " >编辑</button>
+                    <a href="/article/editArticle.html?id={{item.Id}}" class=" layui-btn layui-btn-xs " >编辑</a>
                     <button class=" layui-btn layui-btn-xs layui-bg-red" data-id="{{item.Id}}">删除</button>
                 </td>
               </tr>

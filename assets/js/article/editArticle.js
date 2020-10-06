@@ -10,19 +10,31 @@ const options = {
 $image.cropper(options);
 
 let form = layui.form
-// 获取分类
+
+// 获取穿过来的id
+let id = new URLSearchParams(location.search).get('id')
+
+// 列表渲染
 $.ajax({
     url: '/my/article/cates',
     success: function (res) {
-        if (res.status === 0) {
-            let html = template('render_cate', res)
-            $('.select').append(html)
-            form.render('select')
-            // 富文本编辑器
-            initEditor()
-        }
+        let html = template('render_cate', res)
+        $('.select').append(html)
+        // 更新渲染
+        form.render('select');
+        // 数据回填
+        $.ajax({
+            url: '/my/article/' + id,
+            success: function (res) {
+                if (res.status === 0) {
+                    form.val('render', res.data);
+                    initEditor();
+                    $image.cropper('destroy').attr('src', 'http://ajax.frontend.itheima.net' + res.data.cover_img).cropper(options);
+                }
+            }
+        });
     }
-})
+});
 
 $('button:contains("选择封面")').on('click', function () {
     $('input[type="file"]').click()
@@ -50,9 +62,10 @@ $('form').on('submit', function (e) {
     canvas.toBlob(function (blob) {
         // 剪裁后的图片追加到formdata中
         data.append('cover_img', blob)
+        data.append('Id', id)
         $.ajax({
             type: 'POST',
-            url: '/my/article/add',
+            url: '/my/article/edit',
             data: data,
             processData: false,
             contentType: false,
