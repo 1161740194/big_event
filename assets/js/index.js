@@ -8,6 +8,9 @@ function getUser() {
                 let user = res.data.nickname || res.data.username
                 let first = res.data.username.substr(0, 1).toUpperCase()
                 $('.username').text(user)
+                if(res.data.user_pic) {
+                    $('.avatar').hide()
+                }
                 res.data.user_pic ? $('.layui-nav-img').attr('src', res.data.user_pic).show() : $('.avatar').text(first).css('display', 'inline-block')
             }
         }
